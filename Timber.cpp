@@ -28,10 +28,15 @@ int main()
 			window.close();
 		}
 
+	//Double Buffering
+
+		//clear the display
 		window.clear();
 
+		//Draw everything
 		window.draw(spriteBackground);
 
+		//Display
 		window.display();
 	}
 	return 0;
