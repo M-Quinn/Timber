@@ -11,6 +11,9 @@
 *.gch
 *.pch
 
+# Visual Studio cache directory
+.vs/
+
 # Compiled Dynamic libraries
 *.so
 *.dylib
