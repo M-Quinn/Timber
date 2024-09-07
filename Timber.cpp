@@ -1,3 +1,4 @@
+#include <iostream>
 #include<SFML/Graphics.hpp>
 using namespace sf;
 
@@ -15,7 +16,10 @@ int main()
 	Texture textureBackground;
 	Sprite spriteBackground;
 
-	textureBackground.loadFromFile(PATH_BACKGROUND_IMAGE);
+	if(!textureBackground.loadFromFile(PATH_BACKGROUND_IMAGE))
+	{
+		std::cout << "Error: Could not find Background texture";
+	}
 	spriteBackground.setTexture(textureBackground);
 
 	spriteBackground.setPosition(0, 0);
