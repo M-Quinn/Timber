@@ -99,7 +99,7 @@ int main()
 			window.close();
 		}
 
-		//Init Bee
+
 		if(!bee_active_)
 		{
 			//Seed the random number
@@ -116,6 +116,19 @@ int main()
 
 			sprite_bee_.setPosition(bee_position_);
 			bee_active_ = true;
+		}
+		else
+		{
+			auto cur_pos = sprite_bee_.getPosition();
+
+			sprite_bee_.setPosition(
+				cur_pos.x - bee_speed_ * delta_time_.asSeconds(),
+				cur_pos.y);
+
+			if(sprite_bee_.getPosition().x < -100)
+			{
+				bee_active_ = false;
+			}
 		}
 
 
