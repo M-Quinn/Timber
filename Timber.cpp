@@ -30,10 +30,10 @@ Sprite sprite_tree_;
 Sprite sprite_bee_;
 
 bool bee_active_ = false;
-bool cloud_1_active_, cloud_2_active_, cloud_3_active_;
+bool acive_clouds_[3] = { false, false, false };
 
 float bee_speed_ = 0.0f;
-float cloud_1_speed_, cloud_2_speed_, cloud_3_speed_;
+float speed_clouds[3] = { 0.0f,0.0f,0.0f };
 
 ///returns a random number between 0-199 then adds 200 for an end result of 200-399
 int GetBeeSpeed()
@@ -47,15 +47,28 @@ int GetBeeHeight()
 	return rand() % 500 + 500;
 }
 
+float GetCloudHeight(int i)
+{
+	float height;
+	switch(i)
+	{
+	case 0:
+		return height = rand() % 150;
+	case 1:
+		return height = (rand() % 300) - 150;
+	case 2:
+		return height = (rand() % 450) - 150;
+	default:
+		std::cout << "Error: cloud height given wrong position";
+		return height = rand() % 150;
+	}
+}
+
 int main()
 {
 	//Create the window
 	VideoMode vm(SCREEN_WIDTH_, SCREEN_HEIGHT_);
 	RenderWindow window(vm, SCREEN_TITLE_, Style::Fullscreen);
-
-	
-	cloud_1_active_ = cloud_2_active_ = cloud_3_active_ = false;
-	cloud_1_speed_ = cloud_2_speed_ = cloud_3_speed_ = 0.0f;
 
 	
 	if(!texture_background_.loadFromFile(PATH_BACKGROUND_IMAGE_))
@@ -128,6 +141,37 @@ int main()
 			if(sprite_bee_.getPosition().x < -100)
 			{
 				bee_active_ = false;
+			}
+		}
+
+
+		for(int i = 0; i < std::size(sprite_clouds_); i++)
+		{
+			if(!acive_clouds_[i])
+			{
+				srand((int)time(0) * ((i + 1) * 10));// multiply by 10,20,30...
+
+				speed_clouds[i] = (rand()+30) % 200;
+
+				float height = GetCloudHeight(i);
+				
+
+				sprite_clouds_[i].setPosition(-200, height);
+
+				acive_clouds_[i] = true;
+			}
+			else
+			{
+				auto cur_pos = sprite_clouds_[i].getPosition();
+
+				sprite_clouds_[i].setPosition(
+					cur_pos.x + speed_clouds[i] * delta_time_.asSeconds(),
+					cur_pos.y);
+
+				if(sprite_clouds_[i].getPosition().x > 1920)
+				{
+					acive_clouds_[i] = false;
+				}
 			}
 		}
 
