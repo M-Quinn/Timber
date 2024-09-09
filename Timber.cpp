@@ -1,5 +1,6 @@
 #include <iostream>
 #include<SFML/Graphics.hpp>
+#include<sstream>
 using namespace sf;
 
 const int SCREEN_WIDTH_ = 1920;
@@ -31,9 +32,15 @@ Sprite sprite_bee_;
 
 bool bee_active_ = false;
 bool acive_clouds_[3] = { false, false, false };
+bool paused_ = true;
 
 float bee_speed_ = 0.0f;
 float speed_clouds[3] = { 0.0f,0.0f,0.0f };
+
+int score_ = 0;
+Text messageText_;
+Text scoreText_;
+Font font_;
 
 ///returns a random number between 0-199 then adds 200 for an end result of 200-399
 int GetBeeSpeed()
@@ -102,6 +109,17 @@ int main()
 	sprite_clouds_[2].setTexture(texture_cloud_);
 	sprite_clouds_[2].setPosition(CLOUD3_POSITION_);
 
+	if (!font_.loadFromFile("fonts/KOMIKAP_.ttf")) 
+	{
+		std::cout << "Error: Could not find font";
+	}
+
+	messageText_.setFont(font_);
+	scoreText_.setFont(font_);
+
+	messageText_.setString("Press Enter to start!");
+
+
 	while(window.isOpen())
 	{
 
@@ -112,68 +130,76 @@ int main()
 			window.close();
 		}
 
-
-		if(!bee_active_)
+		if (Keyboard::isKeyPressed(Keyboard::Enter)) 
 		{
-			//Seed the random number
-			srand((int)time(0));
-
-			bee_speed_ = GetBeeSpeed(); 
-
-			//Seed again
-			srand((int)time(0) * 10);
-
-			float height = GetBeeHeight();
-
-			bee_position_.y = height;
-
-			sprite_bee_.setPosition(bee_position_);
-			bee_active_ = true;
-		}
-		else
-		{
-			auto cur_pos = sprite_bee_.getPosition();
-
-			sprite_bee_.setPosition(
-				cur_pos.x - bee_speed_ * delta_time_.asSeconds(),
-				cur_pos.y);
-
-			if(sprite_bee_.getPosition().x < -100)
-			{
-				bee_active_ = false;
-			}
+			paused_ = false;
 		}
 
-
-		for(int i = 0; i < std::size(sprite_clouds_); i++)
+		if (!paused_) 
 		{
-			if(!acive_clouds_[i])
+			if (!bee_active_)
 			{
-				srand((int)time(0) * ((i + 1) * 10));// multiply by 10,20,30...
+				//Seed the random number
+				srand((int)time(0));
 
-				speed_clouds[i] = (rand()+30) % 200;
+				bee_speed_ = GetBeeSpeed();
 
-				float height = GetCloudHeight(i);
-				
+				//Seed again
+				srand((int)time(0) * 10);
 
-				sprite_clouds_[i].setPosition(-200, height);
+				float height = GetBeeHeight();
 
-				acive_clouds_[i] = true;
+				bee_position_.y = height;
+
+				sprite_bee_.setPosition(bee_position_);
+				bee_active_ = true;
 			}
 			else
 			{
-				auto cur_pos = sprite_clouds_[i].getPosition();
+				auto cur_pos = sprite_bee_.getPosition();
 
-				sprite_clouds_[i].setPosition(
-					cur_pos.x + speed_clouds[i] * delta_time_.asSeconds(),
+				sprite_bee_.setPosition(
+					cur_pos.x - bee_speed_ * delta_time_.asSeconds(),
 					cur_pos.y);
 
-				if(sprite_clouds_[i].getPosition().x > 1920)
+				if (sprite_bee_.getPosition().x < -100)
 				{
-					acive_clouds_[i] = false;
+					bee_active_ = false;
+				}
+			}
+
+
+			for (int i = 0; i < std::size(sprite_clouds_); i++)
+			{
+				if (!acive_clouds_[i])
+				{
+					srand((int)time(0) * ((i + 1) * 10));// multiply by 10,20,30...
+
+					speed_clouds[i] = (rand() + 30) % 200;
+
+					float height = GetCloudHeight(i);
+
+
+					sprite_clouds_[i].setPosition(-200, height);
+
+					acive_clouds_[i] = true;
+				}
+				else
+				{
+					auto cur_pos = sprite_clouds_[i].getPosition();
+
+					sprite_clouds_[i].setPosition(
+						cur_pos.x + speed_clouds[i] * delta_time_.asSeconds(),
+						cur_pos.y);
+
+					if (sprite_clouds_[i].getPosition().x > 1920)
+					{
+						acive_clouds_[i] = false;
+					}
 				}
 			}
 		}
+		
 
 
 
