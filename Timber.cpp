@@ -10,6 +10,7 @@ const String PATH_BACKGROUND_IMAGE_ = "graphics/background.png";
 const String PATH_TREE_IMAGE_ = "graphics/tree.png";
 const String PATH_BEE_IMAGE_ = "graphics/bee.png";
 const String PATH_CLOUD_IMAGE_ = "graphics/cloud.png";
+const String PATH_BRANCH_IMAGE_ = "graphics/branch.png";
 const Vector2<float> TREE_POSITION_ = { 810,0 };
 const Vector2<float> CLOUD1_POSITION_ = { 0,0 };
 const Vector2<float> CLOUD2_POSITION_ = { 0,250 };
@@ -33,11 +34,12 @@ Texture texture_background_;
 Texture texture_tree_;
 Texture texture_bee_;
 Texture texture_cloud_;
+Texture texture_branch_;
 Sprite sprite_clouds_[3];
 Sprite sprite_background_;
 Sprite sprite_tree_;
 Sprite sprite_bee_;
-Sprite brances_[NUM_BRANCHES_];
+Sprite branches_[NUM_BRANCHES_];
 
 enum class Side
 {
@@ -46,7 +48,7 @@ enum class Side
 	NONE
 };
 
-Side branchPositions[NUM_BRANCHES_];
+Side branch_positions_[NUM_BRANCHES_];
 
 bool bee_active_ = false;
 bool acive_clouds_[3] = { false, false, false };
@@ -113,6 +115,18 @@ int main()
 	sprite_clouds_[2].setTexture(texture_cloud_);
 	sprite_clouds_[2].setPosition(CLOUD3_POSITION_);
 
+	if (!texture_branch_.loadFromFile(PATH_BRANCH_IMAGE_)) 
+	{
+		std::cout << "Error: Could not find branch texture";
+	}
+
+	for (int i = 0; i < std::size(branches_); i++)
+	{
+		branches_[i].setTexture(texture_branch_);
+		branches_[i].setPosition(-2000, -2000);
+		branches_[i].setOrigin(220, 20);
+	}
+
 	if (!font_.loadFromFile("fonts/KOMIKAP_.ttf")) 
 	{
 		std::cout << "Error: Could not find font";
@@ -140,6 +154,9 @@ int main()
 
 
 
+	for (int i = 0; i < std::size(branches_); i++) {
+		UpdateBranches(i + 1);
+	}
 
 
 	while(window.isOpen())
@@ -178,6 +195,26 @@ int main()
 			time_bar_shape_.setSize(Vector2f(
 				time_bar_width_per_second_ * time_remaining_,
 				time_bar_height_));
+
+			//Update Branches
+			for (int i = 0; i < std::size(branches_); i++)
+			{
+				float height = i * 150;
+
+				switch(branch_positions_[i]) {
+				case Side::LEFT:
+					branches_[i].setPosition(610, height);
+					branches_[i].setRotation(180);
+					break;
+				case Side::RIGHT:
+					branches_[i].setPosition(1330, height);
+					branches_[i].setRotation(0);
+					break;
+				case Side::NONE:
+					branches_[i].setPosition(3000, height);
+					break;
+				}
+			}
 
 			if (!bee_active_)
 			{
@@ -261,9 +298,11 @@ int main()
 		window.draw(sprite_tree_);
 		window.draw(sprite_bee_);
 		for (auto sprite_cloud : sprite_clouds_)
-		{
 			window.draw(sprite_cloud);
-		}
+
+		for (auto branch : branches_)
+			window.draw(branch);
+
 		window.draw(time_bar_shape_);
 
 		if (paused_)
@@ -306,5 +345,29 @@ float GetCloudHeight(int i)
 	default:
 		std::cout << "Error: cloud height given wrong position";
 		return height = rand() % 150;
+	}
+}
+
+void UpdateBranches(int seed)
+{
+	for (int i = 0; i < std::size(branches_); i++) 
+	{
+		branch_positions_[i] = branch_positions_[i - 1];
+	}
+	//Seed the random number
+	srand((int)time(0) + seed);
+	int r = rand() % 5;
+	
+	switch (r) 
+	{
+	case 0:
+		branch_positions_[0] = Side::LEFT;
+		break;
+	case 1:
+		branch_positions_[0] = Side::RIGHT;
+		break;
+	default:
+		branch_positions_[0] = Side::NONE;
+		break;
 	}
 }
