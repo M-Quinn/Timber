@@ -38,8 +38,8 @@ float bee_speed_ = 0.0f;
 float speed_clouds[3] = { 0.0f,0.0f,0.0f };
 
 int score_ = 0;
-Text messageText_;
-Text scoreText_;
+Text message_text_;
+Text score_text_;
 Font font_;
 
 ///returns a random number between 0-199 then adds 200 for an end result of 200-399
@@ -114,10 +114,28 @@ int main()
 		std::cout << "Error: Could not find font";
 	}
 
-	messageText_.setFont(font_);
-	scoreText_.setFont(font_);
+	message_text_.setFont(font_);
+	score_text_.setFont(font_);
 
-	messageText_.setString("Press Enter to start!");
+	message_text_.setCharacterSize(75);
+	score_text_.setCharacterSize(100);
+
+	message_text_.setFillColor(Color::White);
+	score_text_.setFillColor(Color::White);
+
+	message_text_.setString("Press Enter to start!");
+	score_text_.setString("Score = 0");
+
+	FloatRect textRect = message_text_.getLocalBounds();
+	message_text_.setOrigin(
+		textRect.left + textRect.width / 2.0f,
+		textRect.top + textRect.height / 2.0f);
+	message_text_.setPosition(1920 / 2.0f, 1080 / 2.0f);
+
+	score_text_.setPosition(20, 20);
+
+
+
 
 
 	while(window.isOpen())
@@ -198,6 +216,12 @@ int main()
 					}
 				}
 			}
+
+			//Update Score
+
+			std::stringstream ss;
+			ss << "Score = " << score_;
+			score_text_.setString(ss.str());
 		}
 		
 
@@ -216,6 +240,11 @@ int main()
 		{
 			window.draw(sprite_cloud);
 		}
+
+		if (paused_)
+			window.draw(message_text_);
+		else
+			window.draw(score_text_);
 
 		//Display
 		window.display();
