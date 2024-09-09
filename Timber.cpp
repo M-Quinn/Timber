@@ -20,6 +20,13 @@ Vector2<float> bee_position_ = { 2000,0 };
 
 Clock clock_;
 Time delta_time_;
+Time game_time_total_;
+float time_remaining_ = 6.0f;
+float time_bar_width_per_second_;
+RectangleShape time_bar_shape_;
+float time_bar_start_width_ = 400;
+float time_bar_height_ = 80;
+
 
 Texture texture_background_;
 Texture texture_tree_;
@@ -77,6 +84,13 @@ int main()
 	VideoMode vm(SCREEN_WIDTH_, SCREEN_HEIGHT_);
 	RenderWindow window(vm, SCREEN_TITLE_, Style::Fullscreen);
 
+	//handle time bar
+	time_bar_shape_.setSize(Vector2f(
+		time_bar_start_width_,
+		time_bar_height_));
+	time_bar_shape_.setFillColor(Color::Red);
+	time_bar_shape_.setPosition((1920 / 2) - time_bar_start_width_ / 2, 980);
+	time_bar_width_per_second_ = time_bar_start_width_ / time_remaining_;
 	
 	if(!texture_background_.loadFromFile(PATH_BACKGROUND_IMAGE_))
 	{
@@ -151,10 +165,30 @@ int main()
 		if (Keyboard::isKeyPressed(Keyboard::Enter)) 
 		{
 			paused_ = false;
+			score_ = 0;
+			time_remaining_ = 6.0f;
+		}
+
+		if (time_remaining_ <= 0.0f) 
+		{
+			paused_ = true;
+			message_text_.setString("Out of time!");
+
+			FloatRect textRect = message_text_.getLocalBounds();
+			message_text_.setOrigin(
+				textRect.left + textRect.width / 2.0f,
+				textRect.top + textRect.height / 2.0f);
+
+			message_text_.setPosition(1920 / 2.0f, 1080 / 2.0f);
 		}
 
 		if (!paused_) 
 		{
+			time_remaining_ -= delta_time_.asSeconds();
+			time_bar_shape_.setSize(Vector2f(
+				time_bar_width_per_second_ * time_remaining_,
+				time_bar_height_));
+
 			if (!bee_active_)
 			{
 				//Seed the random number
@@ -240,6 +274,7 @@ int main()
 		{
 			window.draw(sprite_cloud);
 		}
+		window.draw(time_bar_shape_);
 
 		if (paused_)
 			window.draw(message_text_);
