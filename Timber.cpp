@@ -49,34 +49,11 @@ Text message_text_;
 Text score_text_;
 Font font_;
 
-///returns a random number between 0-199 then adds 200 for an end result of 200-399
-int GetBeeSpeed()
-{
-	return rand() % 200 + 200;
-}
+//Function Prototypes
+int GetBeeSpeed();
+int GetBeeHeight();
+float GetCloudHeight(int i);
 
-///returns 0-499 then adds 500 for end result 500-999;
-int GetBeeHeight()
-{
-	return rand() % 500 + 500;
-}
-
-float GetCloudHeight(int i)
-{
-	float height;
-	switch(i)
-	{
-	case 0:
-		return height = rand() % 150;
-	case 1:
-		return height = (rand() % 300) - 150;
-	case 2:
-		return height = (rand() % 450) - 150;
-	default:
-		std::cout << "Error: cloud height given wrong position";
-		return height = rand() % 150;
-	}
-}
 
 int main()
 {
@@ -285,4 +262,36 @@ int main()
 		window.display();
 	}
 	return 0;
+}
+
+
+
+
+///returns a random number between 0-199 then adds 200 for an end result of 200-399
+int GetBeeSpeed()
+{
+	return rand() % 200 + 200;
+}
+
+///returns 0-499 then adds 500 for end result 500-999;
+int GetBeeHeight()
+{
+	return rand() % 500 + 500;
+}
+
+float GetCloudHeight(int i)
+{
+	float height;
+	switch (i)
+	{
+	case 0:
+		return height = rand() % 150;
+	case 1:
+		return height = (rand() % 300) - 150;
+	case 2:
+		return height = (rand() % 450) - 150;
+	default:
+		std::cout << "Error: cloud height given wrong position";
+		return height = rand() % 150;
+	}
 }
