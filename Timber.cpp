@@ -14,6 +14,7 @@ const Vector2<float> TREE_POSITION_ = { 810,0 };
 const Vector2<float> CLOUD1_POSITION_ = { 0,0 };
 const Vector2<float> CLOUD2_POSITION_ = { 0,250 };
 const Vector2<float> CLOUD3_POSITION_ = { 0,500 };
+const int NUM_BRANCHES_ = 6;
 
 Vector2<float> bee_position_ = { 2000,0 };
 
@@ -36,6 +37,16 @@ Sprite sprite_clouds_[3];
 Sprite sprite_background_;
 Sprite sprite_tree_;
 Sprite sprite_bee_;
+Sprite brances_[NUM_BRANCHES_];
+
+enum class Side
+{
+	LEFT, 
+	RIGHT, 
+	NONE
+};
+
+Side branchPositions[NUM_BRANCHES_];
 
 bool bee_active_ = false;
 bool acive_clouds_[3] = { false, false, false };
@@ -53,6 +64,8 @@ Font font_;
 int GetBeeSpeed();
 int GetBeeHeight();
 float GetCloudHeight(int i);
+void UpdateBranches(int seed);
+
 
 
 int main()
