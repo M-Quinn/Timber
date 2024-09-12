@@ -21,6 +21,7 @@ const Vector2<float> CLOUD2_POSITION_ = { 0,250 };
 const Vector2<float> CLOUD3_POSITION_ = { 0,500 };
 const Vector2f PLAYER_START_POSITION_ = { 580, 720 };
 const Vector2f RIP_POSITION_ = { 600, 860 };
+const Vector2f RIP_START_POSITION_ = { 675, 2000 };
 const Vector2f AXE_START_POSITION = { 700, 830 };
 const Vector2f LOG_POSITION = { 810, 720 };
 const Vector2f LOG_SPEED = { 1000, -1500 };
@@ -73,6 +74,8 @@ Side branch_positions_[NUM_BRANCHES_];
 bool bee_active_ = false;
 bool acive_clouds_[3] = { false, false, false };
 bool paused_ = true;
+bool log_acive_ = false;
+bool accept_input_ = false;
 
 float bee_speed_ = 0.0f;
 float speed_clouds[3] = { 0.0f,0.0f,0.0f };
@@ -230,8 +233,17 @@ int main()
 		if (Keyboard::isKeyPressed(Keyboard::Enter)) 
 		{
 			paused_ = false;
+			accept_input_ = true;
 			score_ = 0;
 			time_remaining_ = 6.0f;
+
+			for (int i = 0 < std::size(branches_); i++)
+			{
+				branch_positions_[i] = Side::NONE;
+			}
+
+			sprite_rip_.setPosition(RIP_START_POSITION_);
+			sprite_player_.setPosition(PLAYER_START_POSITION_);
 		}
 
 		if (time_remaining_ <= 0.0f) 
@@ -245,6 +257,11 @@ int main()
 				textRect.top + textRect.height / 2.0f);
 
 			message_text_.setPosition(1920 / 2.0f, 1080 / 2.0f);
+		}
+
+		if (accept_input_) 
+		{
+			
 		}
 
 		if (!paused_) 
