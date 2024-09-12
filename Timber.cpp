@@ -153,12 +153,6 @@ int main()
 	score_text_.setPosition(20, 20);
 
 
-
-	for (int i = 0; i < std::size(branches_); i++) {
-		UpdateBranches(i + 1);
-	}
-
-
 	while(window.isOpen())
 	{
 
@@ -195,6 +189,10 @@ int main()
 			time_bar_shape_.setSize(Vector2f(
 				time_bar_width_per_second_ * time_remaining_,
 				time_bar_height_));
+
+			for (int i = 0; i < std::size(branches_); i++) {
+				UpdateBranches(i + 1);
+			}
 
 			//Update Branches
 			for (int i = 0; i < std::size(branches_); i++)
@@ -350,7 +348,7 @@ float GetCloudHeight(int i)
 
 void UpdateBranches(int seed)
 {
-	for (int i = 0; i < std::size(branches_); i++) 
+	for (int i = std::size(branches_); i > 0; i--)
 	{
 		branch_positions_[i] = branch_positions_[i - 1];
 	}
