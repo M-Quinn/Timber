@@ -474,8 +474,7 @@ int main()
 
 		if (paused_)
 			window.draw(message_text_);
-		else
-			window.draw(score_text_);
+		window.draw(score_text_);
 
 		//Display
 		window.display();
