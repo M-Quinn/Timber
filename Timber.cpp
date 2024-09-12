@@ -19,7 +19,8 @@ const Vector2<float> TREE_POSITION_ = { 810,0 };
 const Vector2<float> CLOUD1_POSITION_ = { 0,0 };
 const Vector2<float> CLOUD2_POSITION_ = { 0,250 };
 const Vector2<float> CLOUD3_POSITION_ = { 0,500 };
-const Vector2f PLAYER_START_POSITION_ = { 580, 720 };
+const Vector2f PLAYER_POSITION_LEFT_ = { 580, 720 };
+const Vector2f PLAYER_POSITION_RIGHT_ = { 1200, 720 };
 const Vector2f RIP_POSITION_ = { 600, 860 };
 const Vector2f RIP_START_POSITION_ = { 675, 2000 };
 const Vector2f AXE_START_POSITION = { 700, 830 };
@@ -91,6 +92,7 @@ int GetBeeSpeed();
 int GetBeeHeight();
 float GetCloudHeight(int i);
 void UpdateBranches(int seed);
+void HandleScoreIncrease();
 
 
 
@@ -158,7 +160,7 @@ int main()
 	else 
 	{
 		sprite_player_.setTexture(texture_player_);
-		sprite_player_.setPosition(PLAYER_START_POSITION_);
+		sprite_player_.setPosition(PLAYER_POSITION_LEFT_);
 	}
 
 	if (!texture_rip_.loadFromFile(PATH_RIP_IMAGE_))
@@ -244,7 +246,7 @@ int main()
 			}
 
 			sprite_rip_.setPosition(RIP_START_POSITION_);
-			sprite_player_.setPosition(PLAYER_START_POSITION_);
+			sprite_player_.setPosition(PLAYER_POSITION_LEFT_);
 		}
 
 		if (time_remaining_ <= 0.0f) 
@@ -266,18 +268,14 @@ int main()
 			{
 				player_side_ = Side::RIGHT;
 
-				score_++;
+				HandleScoreIncrease();
 
-				//Score should never be 0 but will check anyway
-				if (score_ <= 0) 
-				{
-					std::cout << "Error: score was 0 or below resulting in a division by 0";
-					score_ = 1;
-				}
+				sprite_axe_.setPosition(
+					AXE_POSITION_RIGHT_,
+					sprite_axe_.getPosition().y
+				);
 
-				time_remaining_ += (2 / score_) + 0.15;
-
-				sprite_axe_.setPosition(1200, 720);
+				sprite_player_.setPosition(PLAYER_POSITION_RIGHT_);
 
 				UpdateBranches(score_);
 
@@ -289,7 +287,23 @@ int main()
 
 			if (Keyboard::isKeyPressed(Keyboard::Left))
 			{
+				player_side_ = Side::LEFT;
 
+				HandleScoreIncrease();
+
+				sprite_axe_.setPosition(
+					AXE_POSITION_LEFT_,
+					sprite_axe_.getPosition().y
+				);
+
+				sprite_player_.setPosition(PLAYER_POSITION_LEFT_);
+
+				UpdateBranches(score_);
+
+				sprite_log_.setPosition(810, 720);
+				LOG_SPEED.x = 5000;
+				log_acive_ = true;
+				accept_input_ = false;
 			}
 		}
 
@@ -483,4 +497,18 @@ void UpdateBranches(int seed)
 		branch_positions_[0] = Side::NONE;
 		break;
 	}
+}
+
+void HandleScoreIncrease() 
+{
+	score_++;
+
+	//Score should never be 0 but will check anyway
+	if (score_ <= 0)
+	{
+		std::cout << "Error: score was 0 or below resulting in a division by 0";
+		score_ = 1;
+	}
+
+	time_remaining_ += (2 / score_) + 0.15;
 }
