@@ -14,6 +14,7 @@ const String PATH_BRANCH_IMAGE_ = "graphics/branch.png";
 const String PATH_PLAYER_IMAGE_ = "graphics/player.png";
 const String PATH_RIP_IMAGE_ = "graphics/rip.png";
 const String PATH_AXE_IMAGE_ = "graphics/axe.png";
+const String PATH_LOG_IMAGE_ = "graphics/log.png";
 const Vector2<float> TREE_POSITION_ = { 810,0 };
 const Vector2<float> CLOUD1_POSITION_ = { 0,0 };
 const Vector2<float> CLOUD2_POSITION_ = { 0,250 };
@@ -21,6 +22,8 @@ const Vector2<float> CLOUD3_POSITION_ = { 0,500 };
 const Vector2f PLAYER_START_POSITION_ = { 580, 720 };
 const Vector2f RIP_POSITION_ = { 600, 860 };
 const Vector2f AXE_START_POSITION = { 700, 830 };
+const Vector2f LOG_POSITION = { 810, 720 };
+const Vector2f LOG_SPEED = { 1000, -1500 };
 const float AXE_POSITION_LEFT_ = 700;
 const float AXE_POSITION_RIGHT_ = 1075;
 const int NUM_BRANCHES_ = 6;
@@ -46,6 +49,7 @@ Texture texture_branch_;
 Texture texture_player_;
 Texture texture_rip_;
 Texture texture_axe_;
+Texture texture_log_;
 
 Sprite sprite_clouds_[3];
 Sprite sprite_background_;
@@ -55,6 +59,7 @@ Sprite branches_[NUM_BRANCHES_];
 Sprite sprite_player_;
 Sprite sprite_rip_;
 Sprite sprite_axe_;
+Sprite sprite_log_;
 
 enum class Side
 {
@@ -170,6 +175,16 @@ int main()
 	{
 		sprite_axe_.setTexture(texture_axe_);
 		sprite_axe_.setPosition(AXE_START_POSITION);
+	}
+
+	if (!texture_log_.loadFromFile(PATH_LOG_IMAGE_))
+	{
+		std::cout << "Error: Could not find Log texture";
+	}
+	else
+	{
+		sprite_log_.setTexture(texture_log_);
+		sprite_log_.setPosition(LOG_POSITION);
 	}
 
 
