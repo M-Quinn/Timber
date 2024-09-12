@@ -359,6 +359,11 @@ int main()
 		window.draw(sprite_background_);
 		window.draw(sprite_tree_);
 		window.draw(sprite_bee_);
+		window.draw(sprite_player_);
+		window.draw(sprite_log_);
+		window.draw(sprite_axe_);
+		window.draw(sprite_rip_);
+
 		for (auto sprite_cloud : sprite_clouds_)
 			window.draw(sprite_cloud);
 
