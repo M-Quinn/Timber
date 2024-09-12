@@ -159,12 +159,17 @@ int main()
 	else
 	{
 		sprite_rip_.setTexture(texture_rip_);
-		sprite_rip_.setPosition();
+		sprite_rip_.setPosition(RIP_POSITION_);
 	}
 
 	if (!texture_axe_.loadFromFile(PATH_AXE_IMAGE_))
 	{
 		std::cout << "Error: Could not find axe texture";
+	}
+	else
+	{
+		sprite_axe_.setTexture(texture_axe_);
+		sprite_axe_.setPosition(AXE_START_POSITION);
 	}
 
 
