@@ -11,10 +11,18 @@ const String PATH_TREE_IMAGE_ = "graphics/tree.png";
 const String PATH_BEE_IMAGE_ = "graphics/bee.png";
 const String PATH_CLOUD_IMAGE_ = "graphics/cloud.png";
 const String PATH_BRANCH_IMAGE_ = "graphics/branch.png";
+const String PATH_PLAYER_IMAGE_ = "graphics/player.png";
+const String PATH_RIP_IMAGE_ = "graphics/rip.png";
+const String PATH_AXE_IMAGE_ = "graphics/axe.png";
 const Vector2<float> TREE_POSITION_ = { 810,0 };
 const Vector2<float> CLOUD1_POSITION_ = { 0,0 };
 const Vector2<float> CLOUD2_POSITION_ = { 0,250 };
 const Vector2<float> CLOUD3_POSITION_ = { 0,500 };
+const Vector2f PLAYER_START_POSITION_ = { 580, 720 };
+const Vector2f RIP_POSITION_ = { 600, 860 };
+const Vector2f AXE_START_POSITION = { 700, 830 };
+const float AXE_POSITION_LEFT_ = 700;
+const float AXE_POSITION_RIGHT_ = 1075;
 const int NUM_BRANCHES_ = 6;
 
 Vector2<float> bee_position_ = { 2000,0 };
@@ -133,6 +141,35 @@ int main()
 		branches_[i].setPosition(-2000, -2000);
 		branches_[i].setOrigin(220, 20);
 	}
+
+	if (!texture_player_.loadFromFile(PATH_PLAYER_IMAGE_)) 
+	{
+		std::cout << "Error: Could not find player texture";
+	}
+	else 
+	{
+		sprite_player_.setTexture(texture_player_);
+		sprite_player_.setPosition(PLAYER_START_POSITION_);
+	}
+
+	if (!texture_rip_.loadFromFile(PATH_RIP_IMAGE_))
+	{
+		std::cout << "Error: Could not find rip texture";
+	}
+	else
+	{
+		sprite_rip_.setTexture(texture_rip_);
+		sprite_rip_.setPosition();
+	}
+
+	if (!texture_axe_.loadFromFile(PATH_AXE_IMAGE_))
+	{
+		std::cout << "Error: Could not find axe texture";
+	}
+
+
+
+
 
 	if (!font_.loadFromFile("fonts/KOMIKAP_.ttf")) 
 	{
