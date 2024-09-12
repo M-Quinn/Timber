@@ -228,6 +228,7 @@ int main()
 
 		delta_time_ = clock_.restart();
 
+
 		if(Keyboard::isKeyPressed(Keyboard::Escape))
 		{
 			window.close();
@@ -240,7 +241,7 @@ int main()
 			score_ = 0;
 			time_remaining_ = 6.0f;
 
-			for (int i = 0 < std::size(branches_); i++)
+			for (int i = 0; i < std::size(branches_); i++)
 			{
 				branch_positions_[i] = Side::NONE;
 			}
