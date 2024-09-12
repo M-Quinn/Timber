@@ -35,11 +35,18 @@ Texture texture_tree_;
 Texture texture_bee_;
 Texture texture_cloud_;
 Texture texture_branch_;
+Texture texture_player_;
+Texture texture_rip_;
+Texture texture_axe_;
+
 Sprite sprite_clouds_[3];
 Sprite sprite_background_;
 Sprite sprite_tree_;
 Sprite sprite_bee_;
 Sprite branches_[NUM_BRANCHES_];
+Sprite sprite_player_;
+Sprite sprite_rip_;
+Sprite sprite_axe_;
 
 enum class Side
 {
