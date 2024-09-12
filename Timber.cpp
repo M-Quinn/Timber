@@ -30,7 +30,7 @@ const float AXE_POSITION_RIGHT_ = 1075;
 const int NUM_BRANCHES_ = 6;
 
 Vector2<float> bee_position_ = { 2000,0 };
-Vector2f LOG_SPEED = { 1000, -1500 };
+Vector2f log_speed_ = { 1000, -1500 };
 
 
 Clock clock_;
@@ -76,7 +76,7 @@ Side player_side_ = Side::LEFT;
 bool bee_active_ = false;
 bool acive_clouds_[3] = { false, false, false };
 bool paused_ = true;
-bool log_acive_ = false;
+bool log_active_ = false;
 bool accept_input_ = false;
 
 float bee_speed_ = 0.0f;
@@ -291,8 +291,8 @@ int main()
 				UpdateBranches(score_);
 
 				sprite_log_.setPosition(810, 720);
-				LOG_SPEED.x = -5000;
-				log_acive_ = true;
+				log_speed_.x = -5000;
+				log_active_ = true;
 				accept_input_ = false;
 			}
 
@@ -312,8 +312,8 @@ int main()
 				UpdateBranches(score_);
 
 				sprite_log_.setPosition(810, 720);
-				LOG_SPEED.x = 5000;
-				log_acive_ = true;
+				log_speed_.x = 5000;
+				log_active_ = true;
 				accept_input_ = false;
 			}
 		}
@@ -346,6 +346,20 @@ int main()
 				case Side::NONE:
 					branches_[i].setPosition(3000, height);
 					break;
+				}
+			}
+
+			if (log_active_) 
+			{
+				sprite_log_.setPosition(
+					sprite_log_.getPosition().x + log_speed_.x * delta_time_.asSeconds(),
+					sprite_log_.getPosition().y + log_speed_.y * delta_time_.asSeconds()
+				);
+
+				if (sprite_log_.getPosition().x < -100 || sprite_log_.getPosition().y > 2000)
+				{
+					log_active_ = false;
+					sprite_log_.setPosition(LOG_POSITION);
 				}
 			}
 
