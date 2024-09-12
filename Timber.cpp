@@ -100,7 +100,7 @@ int main()
 {
 	//Create the window
 	VideoMode vm(SCREEN_WIDTH_, SCREEN_HEIGHT_);
-	RenderWindow window(vm, SCREEN_TITLE_, Style::Fullscreen);
+	RenderWindow window(vm, SCREEN_TITLE_, Style::Default);
 
 	//handle time bar
 	time_bar_shape_.setSize(Vector2f(
@@ -161,6 +161,7 @@ int main()
 	{
 		sprite_player_.setTexture(texture_player_);
 		sprite_player_.setPosition(PLAYER_POSITION_LEFT_);
+		player_side_ = Side::LEFT;
 	}
 
 	if (!texture_rip_.loadFromFile(PATH_RIP_IMAGE_))
@@ -251,12 +252,13 @@ int main()
 			score_ = 0;
 			time_remaining_ = 6.0f;
 
-			for (int i = 0; i < std::size(branches_); i++)
+			for (int i = 1; i < std::size(branches_); i++)
 			{
 				branch_positions_[i] = Side::NONE;
 			}
 
 			sprite_rip_.setPosition(RIP_START_POSITION_);
+			player_side_ = Side::LEFT;
 			sprite_player_.setPosition(PLAYER_POSITION_LEFT_);
 		}
 
@@ -325,10 +327,6 @@ int main()
 				time_bar_width_per_second_ * time_remaining_,
 				time_bar_height_));
 
-			for (int i = 0; i < std::size(branches_); i++) {
-				UpdateBranches(i + 1);
-			}
-
 			//Update Branches
 			for (int i = 0; i < std::size(branches_); i++)
 			{
@@ -361,6 +359,23 @@ int main()
 					log_active_ = false;
 					sprite_log_.setPosition(LOG_POSITION);
 				}
+			}
+
+			if (player_side_ != Side::NONE && branch_positions_[5] == player_side_) 
+			{
+				paused_ = true;
+				accept_input_ = false;
+
+				sprite_rip_.setPosition(525, 760);
+
+				sprite_player_.setPosition(2000, 660);
+
+				message_text_.setString("SQUISHED");
+
+				FloatRect textRect = message_text_.getLocalBounds();
+				message_text_.setOrigin(textRect.left + textRect.width / 2.0f,
+					textRect.top + textRect.height / 2.0f);
+				message_text_.setPosition(1920 / 2.0f, 1080 / 2.0f);
 			}
 
 			if (!bee_active_)
@@ -504,7 +519,7 @@ void UpdateBranches(int seed)
 {
 	for (int i = std::size(branches_); i > 0; i--)
 	{
-		branch_positions_[i] = branch_positions_[i - 1];
+		branch_positions_[i-1] = branch_positions_[i - 2];
 	}
 	//Seed the random number
 	srand((int)time(0) + seed);
