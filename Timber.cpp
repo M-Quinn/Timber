@@ -24,12 +24,12 @@ const Vector2f RIP_POSITION_ = { 600, 860 };
 const Vector2f RIP_START_POSITION_ = { 675, 2000 };
 const Vector2f AXE_START_POSITION = { 700, 830 };
 const Vector2f LOG_POSITION = { 810, 720 };
-const Vector2f LOG_SPEED = { 1000, -1500 };
 const float AXE_POSITION_LEFT_ = 700;
 const float AXE_POSITION_RIGHT_ = 1075;
 const int NUM_BRANCHES_ = 6;
 
 Vector2<float> bee_position_ = { 2000,0 };
+Vector2f LOG_SPEED = { 1000, -1500 };
 
 
 Clock clock_;
@@ -70,6 +70,7 @@ enum class Side
 };
 
 Side branch_positions_[NUM_BRANCHES_];
+Side player_side_ = Side::LEFT;
 
 bool bee_active_ = false;
 bool acive_clouds_[3] = { false, false, false };
@@ -261,7 +262,35 @@ int main()
 
 		if (accept_input_) 
 		{
-			
+			if (Keyboard::isKeyPressed(Keyboard::Right)) 
+			{
+				player_side_ = Side::RIGHT;
+
+				score_++;
+
+				//Score should never be 0 but will check anyway
+				if (score_ <= 0) 
+				{
+					std::cout << "Error: score was 0 or below resulting in a division by 0";
+					score_ = 1;
+				}
+
+				time_remaining_ += (2 / score_) + 0.15;
+
+				sprite_axe_.setPosition(1200, 720);
+
+				UpdateBranches(score_);
+
+				sprite_log_.setPosition(810, 720);
+				LOG_SPEED.x = -5000;
+				log_acive_ = true;
+				accept_input_ = false;
+			}
+
+			if (Keyboard::isKeyPressed(Keyboard::Left))
+			{
+
+			}
 		}
 
 		if (!paused_) 
