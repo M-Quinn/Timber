@@ -228,6 +228,16 @@ int main()
 
 		delta_time_ = clock_.restart();
 
+		//Reads releases then allows key presses again
+		Event event;
+		while (window.pollEvent(event)) 
+		{
+			if (event.type == Event::KeyReleased && !paused_) 
+			{
+				accept_input_ = true;
+				sprite_axe_.setPosition(2000, sprite_axe_.getPosition().y);
+			}
+		}
 
 		if(Keyboard::isKeyPressed(Keyboard::Escape))
 		{
